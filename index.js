@@ -69,8 +69,9 @@ module.exports = {
     const { name } = this.app;
     const { storybook={} } = this.app.project.pkg;
     const { ignoreTestFiles=true, config={ 'link': [] } } = storybook;
+    const outputPath = this.app.outputPaths.app.html;
 
-    const distFilePath = path.resolve(result.directory, 'index.html');
+    const distFilePath = path.resolve(result.directory, (outputPath) ? outputPath : 'index.html');
     const testFilePath = path.resolve(result.directory, 'tests/index.html');
     const previewHeadFilePath = path.resolve(process.cwd(), '.storybook/preview-head.html');
     const previewHeadDirectory = path.dirname(previewHeadFilePath);
