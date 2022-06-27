@@ -12,9 +12,9 @@ module.exports = {
 
   configKey: 'ember-cli-storybook',
 
-  _getOptions() {
+  _getOptions(key) {
     let addonOptions = (this.parent && this.parent.options) || (this.app && this.app.options) || {};
-    return addonOptions[this.configKey] || {};
+    return addonOptions[key] || {};
   },
 
   included(app) {
@@ -30,7 +30,7 @@ module.exports = {
 
   postprocessTree(type, appTree) {
     this._super.postprocessTree.apply(this, arguments);
-    let options = this._getOptions();
+    let options = this._getOptions(this.configKey);
 
     let componentFilePathPatterns = options.componentFilePathPatterns || [
       'app/components/*.js',
@@ -68,8 +68,10 @@ module.exports = {
     const { name } = this.app;
     const { storybook={} } = this.app.project.pkg;
     const { ignoreTestFiles=true, config={ 'link': [] } } = storybook;
+    const outputPathsOptions = this._getOptions('outputPaths');
+    const outputPath = outputPathsOptions?.app?.html ||'index.html';
 
-    const distFilePath = path.resolve(result.directory, 'index.html');
+    const distFilePath = path.resolve(result.directory, outputPath);
     const testFilePath = path.resolve(result.directory, 'tests/index.html');
     const previewHeadFilePath = path.resolve(process.cwd(), '.storybook/preview-head.html');
     const previewHeadDirectory = path.dirname(previewHeadFilePath);
